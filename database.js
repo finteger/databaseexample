@@ -1,6 +1,6 @@
-// This file contains mock database data
-
-module.exports = [{
+{
+    "users"  : [
+{
     "id": 1,
     "username": "jsabie0",
     "first_name": "Juan",
@@ -200,4 +200,5 @@ module.exports = [{
     "username": "aind13",
     "first_name": "Aron",
     "email": "aodoghesty13@umich.edu"
-}];
+}]
+}
