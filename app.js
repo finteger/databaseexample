@@ -1,5 +1,7 @@
 var express = require('express');
-var database = require('./database.js');
+const fs = require('fs');
+const { emitWarning } = require('process');
+var database = require('./database.json');
 
 var app = express();
 app.set('views', './views');
@@ -8,7 +10,15 @@ app.use(express.static('public'));
 
 
 app.get('/all', (req, res) => {
-  res.send(database);
+  filePath = './database.json/';
+  fs.readFile(filePath, function (err, data) {
+    if (err) {
+            throw err;
+     }  
+     var jsondata = JSON.parse(data);
+     
+     res.send(jsondata.users);
+   });
 });
 
 app.get('/', (req, res) => {
@@ -16,18 +26,29 @@ res.render('home.ejs');
 });
 
 
-app.post('/:id', (req, res) => {
-  res.send(database);
-});
+app.delete('/delete/:id', (req, res) => {
+  filePath = './database.json/';
+  fs.readFile(filePath, function (err, data) {
+    if (err) {
+            throw err;
+     }  
+     var jsondata = JSON.parse(data);
+     
+     var user = jsondata.users[req.params.id];
 
-app.get('/:first_name', function(req, res){
-  if(!database.find(database => database.first_name  == req.params.first_name)){
-    res.status(404);
-    res.render('index.ejs');
-  } else {
-  res.send(database.find(database => database.first_name == req.params.first_name));
-  }
-});
+     delete user;
+
+     var usertoString = JSON.stringify(user);
+
+     console.log(usertoString);
+
+     res.send(`User ${usertoString} deleted.`);
+    });
+   });
+
+
+
+
 
 
 
